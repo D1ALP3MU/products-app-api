@@ -11,12 +11,32 @@
     <header>
         <h1>Productos Ecommerce 🛒</h1>
     </header>
-
+    
     <main>
-        <div class="products-container" id="products"></div>
+        <!-- CONTROLES -->
+        <div class="controls">
+            <input type="text" id="search" placeholder="Buscar productos..." />
+            <select id="category">
+                <option value="all">Todas las categorías</option>
+                <option value="beauty">Beauty</option>
+                <option value="fragrances">Fragrances</option>
+                <option value="furniture">Furniture</option>
+                <option value="groceries">Groceries</option>
+            </select>
+        </div>
 
+        <!-- PRODUCTOS -->
+        <div class="products-container" id="products"></div>
+        
         <div class="loader" id="loader">Cargando productos...</div>
     </main>
+
+    <div id="modal" class="modal-hidden">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
     
     <script src="./js/main.js"></script>
 </body>
