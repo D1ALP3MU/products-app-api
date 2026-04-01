@@ -31,7 +31,7 @@ function renderProducts(products) {
         
         container.innerHTML += `
             <div class="product">
-                <img src="${product.images[0]}" alt="${product.title}">
+                <img src="${product.thumbnail}" alt="${product.title}">
                 <h3>${truncateText(product.title, 40)}</h3>
                 <p>$${product.price}</p>
                 <button onclick="showDetail(${product.id})" class="btn-ver">Ver más</button>
@@ -59,6 +59,14 @@ document.getElementById('close-modal').onclick = () => {
     modal.classList.add('hidden');
     renderProducts(allProducts); // Volver a renderizar los productos al cerrar el modal
 };
+
+// Cerrar el modal al hacer clic fuera del contenido
+modal.addEventListener('click', (e) => {
+    if(e.target === modal) {
+        modal.classList.add('hidden');
+        renderProducts(allProducts); // Volver a renderizar los productos al cerrar el modal
+    }
+});
 
 // Función para filtrar por categoría
 categorySelect.addEventListener('change', (e) => {
