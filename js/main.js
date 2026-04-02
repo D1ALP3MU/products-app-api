@@ -3,6 +3,8 @@ const loader = document.getElementById('loader');
 const modal = document.getElementById('modal');
 const modalBody = document.getElementById('modal-body');
 const categorySelect = document.getElementById('category');
+const cartModal = document.getElementById('cart-modal');
+const cartItemsContainer = document.getElementById('cart-items');
 
 // Función para obtener los productos desde la API
 async function getProducts() {
@@ -35,6 +37,7 @@ function renderProducts(products) {
                 <h3>${truncateText(product.title, 40)}</h3>
                 <p>$${product.price}</p>
                 <button onclick="showDetail(${product.id})" class="btn-ver">Ver más</button>
+                <button onclick="addToCart(${product.id})" class="btn-ver">Agregar al carrito</button>
             </div>
         `;
     });
@@ -49,6 +52,7 @@ function showDetail(id){
         <img src="${product.images[0]}" alt="${product.title}">
         <p>${product.description}</p>
         <p><strong>$${product.price}</strong></p>
+        <button onclick="addToCart(${product.id})" class="btn-ver">Agregar al carrito</button>
     `;
 
     modal.classList.remove('hidden');
@@ -103,3 +107,125 @@ searchInput.addEventListener('input', (e) => {
 
     renderProducts(filtered);
 });
+
+let cart = [];
+
+// Función para agregar productos al carrito
+function addToCart(id) {
+    const product = allProducts.find(p => p.id === id); // Encontrar el producto por su ID
+    const existsInCart = cart.find(p => p.id === id); // Verificar si el producto ya está en el carrito
+
+    if(existsInCart) {
+        existsInCart.quantity += 1; // Incrementar la cantidad si el producto ya está en el carrito
+        Swal.fire({
+            title: '¡Producto actualizado!',
+            text: `La cantidad de ${product.title} en el carrito ha sido actualizada.`,
+            icon: 'info',
+            confirmButtonText: 'Continuar',
+            confirmButtonColor: '#1A3D63',
+            timer: 2000
+        });
+
+    } else {
+        Swal.fire({
+            title: '¡Producto agregado!',
+            text: `${product.title} ha sido agregado al carrito.`,
+            icon: 'success',
+            confirmButtonText: 'Continuar',
+            confirmButtonColor: '#1A3D63',
+            timer: 2000
+        });
+        cart.push({ ...product, quantity: 1 }); // Agregar el producto al carrito con cantidad inicial de 1     
+    }
+
+    updateCartCount();
+    renderCart(); // Actualizar el carrito para reflejar los cambios
+}
+
+// Función para actualizar el contador del carrito
+function updateCartCount() {
+    const totalItems = cart.reduce((total, product) => total + (product.quantity || 1), 0);
+    document.getElementById('cart-count').textContent = totalItems;
+}
+
+// Función para mostrar el modal del carrito
+document.querySelector('.cart-icon').onclick = () => {
+    renderCart();
+    cartModal.classList.remove('hidden');
+}
+
+document.getElementById('close-cart').onclick = () => {
+    cartModal.classList.add('hidden');
+}
+
+// Función para renderizar los productos en el carrito
+function renderCart() {
+    cartItemsContainer.innerHTML = '';
+
+    if(cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p>Tu carrito está vacío.</p>';
+        return;
+    }
+
+    cart.forEach(product => {
+        cartItemsContainer.innerHTML += `
+            <div class="cart-item">
+                <img src="${product.thumbnail}" alt="${product.title}">
+
+                <div class="cart-title">
+                    <h4>${product.title}</h4>
+                </div>
+
+                <div class="cart-quantity">
+                    <p></p>Cantidad: ${product.quantity}</p>
+                </div>
+                
+                <div class="cart-price">
+                    <p>$${(product.price * product.quantity).toFixed(2)}</p>
+                </div>
+                
+                <button onclick="removeFromCart(${product.id})" class="btn-remove">
+                    ❌
+                </button>
+            </div>
+        `;
+    });
+
+    renderTotal();
+}
+
+// Función para eliminar un producto del carrito
+function removeFromCart(id) {
+    cart = cart.filter(p => p.id !== id);
+
+    renderCart();
+    updateCartCount();
+}
+
+// Cerrar el modal del carrito al hacer clic fuera del contenido
+cartModal.addEventListener('click', (e) => {
+    if(e.target === cartModal) {
+        cartModal.classList.add('hidden');
+    }
+});
+
+// Función para vaciar el carrito
+function clearCart() {
+    cart = [];
+    renderCart();
+    updateCartCount();
+}
+
+// Función para calcular y mostrar el total del carrito
+function renderTotal() {
+    const total = cart.reduce(
+        (sum, product) => sum + product.price * product.quantity,
+        0
+    );
+
+    cartItemsContainer.innerHTML += `
+        <div class="cart-total">
+            <h3>Total: $${total.toFixed(2)}</h3>
+        </div>
+    `;
+}

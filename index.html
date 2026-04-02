@@ -5,13 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Productos Ecommerce</title>
     <link rel="stylesheet" href="./css/styles.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <header>
-        <h1>Productos Ecommerce 🛒</h1>
+    <header class="header">
+        <nav class="navbar">
+            <h1 class="logo">🛒 AlejoShop</h1>
+
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i><span id="cart-count">0</span>
+            </div>
+        </nav>
     </header>
-    
+
+    <div id="cart-modal" class="modal hidden">
+        <div class="modal-content">
+            <span id="close-cart">&times;</span>
+            <h2>Carrito de Compras</h2>
+            <div id="cart-items"></div>
+            <button onclick="clearCart()" class="btn-clear">Vaciar carrito</button>
+        </div>
+    </div>
+
     <main>
         <!-- CONTROLES -->
         <div class="controls">
@@ -37,7 +54,13 @@
             <div id="modal-body"></div>
         </div>
     </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 AlejoShop. Todos los derechos reservados. - Ecommerce App</p>
+    </footer>
     
     <script src="./js/main.js"></script>
+    <!-- Agregar SweetAlert2 para mostrar mensajes de éxito al agregar al carrito -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
