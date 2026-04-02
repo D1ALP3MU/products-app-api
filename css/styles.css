@@ -405,6 +405,7 @@ h3 {
     border-radius: 8px;
     cursor: pointer;
     margin-top: 1rem;
+    transition: 0.3s all ease;
 }
 
 #close-modal:hover {
@@ -436,7 +437,6 @@ h3 {
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(251, 152, 51, 0.2);
 }
-
 
 .controls select {
     appearance: none;

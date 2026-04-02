@@ -10,6 +10,9 @@ Esta aplicación permite visualizar productos obtenidos desde una API, filtrarlo
 
 El proyecto fue desarrollado aplicando buenas prácticas de desarrollo frontend, enfocándose en la experiencia de usuario (UX) y en la organización del código.
 
+## 🚀 Demo en vivo:
+👉 https://products-app-api.vercel.app/
+
 ---
 
 ## 🛠️ Tecnologías utilizadas
@@ -20,6 +23,7 @@ El proyecto fue desarrollado aplicando buenas prácticas de desarrollo frontend,
 * Fetch API
 * LocalStorage
 * SweetAlert2
+* Vercel (Deploy)
 
 ---
 
