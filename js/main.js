@@ -177,8 +177,10 @@ function renderCart() {
                     <h4>${product.title}</h4>
                 </div>
 
-                <div class="cart-quantity">
-                    <p></p>Cantidad: ${product.quantity}</p>
+                <div class="cart-quantity-controls">
+                    <button onclick="decreaseQuantity(${product.id})" class="btn-quantity">-</button>
+                    <span>${product.quantity}</span>
+                    <button onclick="increaseQuantity(${product.id})" class="btn-quantity">+</button>
                 </div>
                 
                 <div class="cart-price">
@@ -186,13 +188,71 @@ function renderCart() {
                 </div>
                 
                 <button onclick="removeFromCart(${product.id})" class="btn-remove">
-                    ❌
+                    X
                 </button>
             </div>
         `;
     });
 
     renderTotal();
+}
+
+// Función para aumentar la cantidad de un producto en el carrito
+function increaseQuantity(id) {
+    const product = cart.find(p => p.id === id);
+
+    product.quantity += 1;
+    renderCart();
+    updateCartCount();
+    saveCart(); // Guardar el carrito actualizado en el localStorage
+}
+
+// Función para disminuir la cantidad de un producto en el carrito
+function decreaseQuantity(id) {
+    const product = cart.find(p => p.id === id);
+
+    if(product.quantity > 1) {
+        product.quantity -= 1;
+    } else {
+        cart = cart.filter(p => p.id !== id); // Eliminar el producto si la cantidad llega a 0
+    }
+
+    renderCart();
+    updateCartCount();
+    saveCart(); // Guardar el carrito actualizado en el localStorage
+}
+
+// Función para finalizar la compra
+function checkout() {
+    if(cart.length === 0) {
+        Swal.fire({
+            title: 'Carrito vacío',
+            text: 'Agrega productos al carrito antes de finalizar la compra.',
+            icon: 'warning',
+            confirmButtonText: 'Continuar',
+            confirmButtonColor: '#1A3D63',
+            timer: 2000
+        });
+        return;
+    }
+
+    const total = cart.reduce(
+        (sum, product) => sum + product.price * product.quantity,
+        0
+    );
+
+    Swal.fire({
+        title: '¡Compra exitosa!',
+        text: `Gracias por tu compra. El total es $${total.toFixed(2)}.`,
+        icon: 'success',
+        confirmButtonText: 'Continuar',
+        confirmButtonColor: '#1A3D63'
+    });
+    
+    cart = []; // Vaciar el carrito después de finalizar la compra
+    renderCart();
+    updateCartCount();
+    saveCart(); // Guardar el carrito vacío en el localStorage
 }
 
 // Función para eliminar un producto del carrito
