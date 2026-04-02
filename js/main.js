@@ -140,6 +140,7 @@ function addToCart(id) {
 
     updateCartCount();
     renderCart(); // Actualizar el carrito para reflejar los cambios
+    saveCart(); // Guardar el carrito actualizado en el localStorage
 }
 
 // Función para actualizar el contador del carrito
@@ -200,6 +201,7 @@ function removeFromCart(id) {
 
     renderCart();
     updateCartCount();
+    saveCart(); // Guardar el carrito actualizado en el localStorage
 }
 
 // Cerrar el modal del carrito al hacer clic fuera del contenido
@@ -214,6 +216,7 @@ function clearCart() {
     cart = [];
     renderCart();
     updateCartCount();
+    saveCart(); // Guardar el carrito vacío en el localStorage
 }
 
 // Función para calcular y mostrar el total del carrito
@@ -229,3 +232,19 @@ function renderTotal() {
         </div>
     `;
 }
+
+// vamos a guardar el carrito en el localStorage para mantenerlo entre sesiones
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+// Cargar el carrito desde el localStorage al iniciar la aplicación
+function loadCart() {
+    const storedCart = localStorage.getItem('cart');
+    if(storedCart) {
+        cart = JSON.parse(storedCart);
+        updateCartCount();
+    }
+}
+
+loadCart(); // Cargar el carrito al iniciar la aplicación
