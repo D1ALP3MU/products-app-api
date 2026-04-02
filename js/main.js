@@ -19,7 +19,7 @@ async function getProducts() {
         renderProducts(allProducts); // Renderizar los productos inicialmente      
     } catch (error) {
         console.error('Error fetching products:', error);
-        container.innerHTML = '<p>Error al cargar los productos. Por favor, inténtalo de nuevo más tarde.</p>';
+        container.innerHTML = '<p class="no-results">Error al cargar los productos. Por favor, inténtalo de nuevo más tarde.</p>';
     } finally {
         loader.style.display = 'none'; // Ocultar el loader después de cargar los productos
     }
@@ -36,8 +36,10 @@ function renderProducts(products) {
                 <img src="${product.thumbnail}" alt="${product.title}">
                 <h3>${truncateText(product.title, 40)}</h3>
                 <p>$${product.price}</p>
-                <button onclick="showDetail(${product.id})" class="btn-ver">Ver más</button>
-                <button onclick="addToCart(${product.id})" class="btn-ver">Agregar al carrito</button>
+                <div class="product-buttons">
+                    <button onclick="showDetail(${product.id})" class="btn-ver">Ver más</button>
+                    <button onclick="addToCart(${product.id})" class="btn-ver">Agregar al carrito</button>
+                </div>
             </div>
         `;
     });
@@ -52,7 +54,7 @@ function showDetail(id){
         <img src="${product.images[0]}" alt="${product.title}">
         <p>${product.description}</p>
         <p><strong>$${product.price}</strong></p>
-        <button onclick="addToCart(${product.id})" class="btn-ver">Agregar al carrito</button>
+        <button onclick="addToCart(${product.id})" class="btn-agregar">Agregar al carrito</button>
     `;
 
     modal.classList.remove('hidden');
@@ -119,21 +121,17 @@ function addToCart(id) {
         existsInCart.quantity += 1; // Incrementar la cantidad si el producto ya está en el carrito
         Swal.fire({
             title: '¡Producto actualizado!',
-            text: `La cantidad de ${product.title} en el carrito ha sido actualizada.`,
             icon: 'info',
-            confirmButtonText: 'Continuar',
-            confirmButtonColor: '#1A3D63',
-            timer: 2000
+            showConfirmButton: false,
+            timer: 1000
         });
 
     } else {
         Swal.fire({
-            title: '¡Producto agregado!',
-            text: `${product.title} ha sido agregado al carrito.`,
+            title: '¡Producto agregado! 🛒',
             icon: 'success',
-            confirmButtonText: 'Continuar',
-            confirmButtonColor: '#1A3D63',
-            timer: 2000
+            showConfirmButton: false,
+            timer: 1000
         });
         cart.push({ ...product, quantity: 1 }); // Agregar el producto al carrito con cantidad inicial de 1     
     }
